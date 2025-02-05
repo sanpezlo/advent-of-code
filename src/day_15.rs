@@ -36,10 +36,10 @@ struct Board {
 }
 
 impl Board {
-    fn parse(input: &str, part_b: bool) -> Board {
+    fn parse(input: &str, part_2: bool) -> Board {
         let (board, moves) = input.trim().split_once("\n\n").unwrap();
 
-        let data = if part_b {
+        let data = if part_2 {
             board
                 .chars()
                 .filter_map(|c| match c {
@@ -65,7 +65,7 @@ impl Board {
         };
 
         let size: Position = (
-            board.lines().next().unwrap().len() * if part_b { 2 } else { 1 },
+            board.lines().next().unwrap().len() * if part_2 { 2 } else { 1 },
             board.lines().count(),
         );
 
@@ -156,7 +156,7 @@ impl Board {
         false
     }
 
-    fn push_b(&mut self, position: Position, direction: Direction) -> bool {
+    fn push_2(&mut self, position: Position, direction: Direction) -> bool {
         if !self.can_push(position, direction) {
             return false;
         }
@@ -182,7 +182,7 @@ impl Board {
                 };
 
                 if let Some((next_box, next_character)) = next_box {
-                    self.push_b(direction.evaluate(next_box), direction);
+                    self.push_2(direction.evaluate(next_box), direction);
                     self.set(direction.evaluate(next_box), next_character);
                     self.set(next_box, Character::Empty);
                 }
@@ -192,7 +192,7 @@ impl Board {
 
         let new_position = direction.evaluate(position);
 
-        if self.push_b(new_position, direction) {
+        if self.push_2(new_position, direction) {
             self.set(new_position, character);
             self.set(position, Character::Empty);
             return true;
@@ -201,13 +201,13 @@ impl Board {
         false
     }
 
-    fn tick_all(&mut self, part_b: bool) {
+    fn tick_all(&mut self, part_2: bool) {
         for i in 0..self.moves.len() {
             let direction = self.moves[i];
             let position = self.robot;
 
-            let can_push = if part_b {
-                self.push_b(position, direction)
+            let can_push = if part_2 {
+                self.push_2(position, direction)
             } else {
                 self.push(position, direction)
             };
